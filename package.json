@@ -1,0 +1,63 @@
+{
+  "name": "file-conflicts",
+  "description": "Detect file system conflicts.",
+  "version": "0.1.0",
+  "homepage": "https://github.com/jonschlinkert/file-conflicts",
+  "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
+  "repository": "jonschlinkert/file-conflicts",
+  "bugs": {
+    "url": "https://github.com/jonschlinkert/file-conflicts/issues"
+  },
+  "license": "MIT",
+  "files": [
+    "index.js",
+    "utils.js"
+  ],
+  "main": "index.js",
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "dependencies": {
+    "ansi-colors": "^0.1.0",
+    "array-pull": "^0.2.0",
+    "async": "^1.5.2",
+    "base-questions": "^0.3.2",
+    "bytes": "^2.2.0",
+    "cli-table": "^0.3.1",
+    "dateformat-light": "^1.0.14",
+    "detect-conflict": "^1.0.0",
+    "diff": "^2.2.1",
+    "error-symbol": "^0.1.0",
+    "gitty": "^3.3.3",
+    "info-symbol": "^0.1.0",
+    "is-affirmative": "^0.1.0",
+    "istextorbinary": "^1.0.2",
+    "lazy-cache": "^1.0.3",
+    "read-chunk": "^1.0.1",
+    "success-symbol": "^0.1.0",
+    "try-open": "^0.1.0",
+    "warning-symbol": "^0.1.0"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-format-md": "*",
+    "mocha": "*",
+    "through2": "^2.0.1"
+  },
+  "keywords": [],
+  "lintDeps": {
+    "ignore": []
+  },
+  "verb": {
+    "layout": "default",
+    "plugins": [
+      "gulp-format-md"
+    ],
+    "related": {
+      "list": []
+    }
+  }
+}
