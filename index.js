@@ -3,6 +3,7 @@
 var path = require('path');
 var utils = require('./lib/utils');
 var diff = require('./lib/diffs');
+var inquirer = require('inquirer2');
 
 /**
  * Detect potential conflicts between existing files and the path and
@@ -32,16 +33,16 @@ module.exports = function(config) {
       throw new Error('expected the base-questions plugin to be registered');
     }
 
+    var actions = {};
+    var files = [];
+
     app.define('conflicts', function(dest, options) {
       if (typeof dest !== 'string') {
         throw new TypeError('expected dest to be a string');
       }
 
       var opts = utils.extend({}, config, this.options, options);
-      var actions = {};
-      var files = [];
-
-      app.use(detectConflicts(files, actions, opts));
+      var detect = detectConflicts(app, files, actions, opts);
 
       return utils.through.obj(function(file, enc, next) {
         if (file.isNull()) return next();
@@ -59,11 +60,12 @@ module.exports = function(config) {
         }
 
         file.path = path.resolve(dest, file.relative);
-        app.detectConflicts(file, next);
+        detect(file, next);
       }, function(next) {
-        for (var i = 0; i < files.length; i++) {
-          this.push(files[i]);
-        }
+        // for (var i = 0; i < files.length; i++) {
+        //   this.push(files[i]);
+        // }
+        files.forEach(this.push.bind(this));
         next();
       });
     });
@@ -87,26 +89,28 @@ module.exports = function(config) {
  * @param {Object} `options`
  */
 
-function detectConflicts(files, actions, options) {
-  return function(app) {
-    if (this.isRegistered('detect-conflicts')) return;
+function detectConflicts(app, files, actions, options) {
+  actionsListeners(app, files, actions);
+  var questions = inquirer();
 
-    actionsListeners(app, files, actions);
+  return function(file, next) {
+    var conflict = utils.detect(file.path, file.contents.toString());
+    if (conflict) {
+      // app.questions.set('actions', createQuestion(file));
+      // app.questions.ask('actions', function(err, answers) {
+      //   if (err) return next(err);
+      //   app.emit('action', answers.actions, file, next);
+      // });
 
-    this.define('detectConflicts', function(file, next) {
-      var conflict = utils.detect(file.path, file.contents.toString());
-      if (conflict) {
-        app.questions.set('actions', createQuestion(file));
-        app.questions.ask('actions', function(err, answers) {
-          if (err) return next(err);
-          app.emit('action', answers.actions, file, next);
-        });
+      questions.prompt(createQuestion(file), function(err, answers) {
+        if (err) return next(err);
+        app.emit('action', answers.actions, file, next);
+      });
 
-      } else {
-        files.push(file);
-        next();
-      }
-    });
+    } else {
+      files.push(file);
+      next();
+    }
   };
 }
 
@@ -121,6 +125,7 @@ function detectConflicts(files, actions, options) {
 
 function actionsListeners(app, files, actions) {
   app.on('action', function(type, file, next) {
+    // console.log(arguments)
     utils.log[type](file);
     app.emit('action.' + type, file, next);
   });
@@ -154,7 +159,7 @@ function actionsListeners(app, files, actions) {
 }
 
 function createQuestion(file) {
-  return {
+  return [{
     name: 'actions',
     type: 'expand',
     save: false,
@@ -180,5 +185,5 @@ function createQuestion(file) {
       name: 'show the differences between the old and the new',
       value: 'diff'
     }]
-  };
+  }];
 }
