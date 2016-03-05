@@ -7,7 +7,6 @@ var mocha = require('gulp-mocha');
 var istanbul = require('gulp-istanbul');
 var eslint = require('gulp-eslint');
 var through = require('through2');
-// var conflicts = require('./');
 
 gulp.task('coverage', function() {
   return gulp.src(['index.js', 'lib/*.js'])
@@ -61,13 +60,5 @@ gulp.task('vars', function() {
       next();
     }))
 });
-
-// gulp.task('conflicts', function(cb) {
-//   var dest = 'vendor/yeoman-generator';
-//   gulp.src('vendor/fixtures/*')
-//     .pipe(conflicts(dest))
-//     .pipe(gulp.dest(dest))
-//     .on('end', cb);
-// });
 
 gulp.task('default', ['mocha', 'eslint']);
