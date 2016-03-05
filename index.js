@@ -1,9 +1,9 @@
 'use strict';
 
 var path = require('path');
+var inquirer = require('inquirer2');
 var utils = require('./lib/utils');
 var diff = require('./lib/diffs');
-var inquirer = require('inquirer2');
 
 /**
  * Detect potential conflicts between existing files and the path and
@@ -27,44 +27,42 @@ var inquirer = require('inquirer2');
 
 module.exports = function(config) {
   return function(app) {
-    if (this.isRegistered('base-conflicts')) return;
-
-    if (typeof app.ask === 'undefined') {
-      throw new Error('expected the base-questions plugin to be registered');
-    }
-
     var actions = {};
     var files = [];
 
-    app.define('conflicts', function(dest, options) {
+    this.define('conflicts', function(dest, options) {
       if (typeof dest !== 'string') {
         throw new TypeError('expected dest to be a string');
       }
 
+      if (!('cwd' in app)) {
+        app.cwd = process.cwd();
+      }
+
       var opts = utils.extend({}, config, this.options, options);
-      var detect = detectConflicts(app, files, actions, opts);
+      detectConflicts(this, files, actions, opts);
 
       return utils.through.obj(function(file, enc, next) {
         if (file.isNull()) return next();
 
-        if (app.options.overwrite === true) {
+        // overwrite the current file
+        if (opts.overwrite === true) {
           return next(null, file);
         }
+        // abort
         if (actions.abort) {
           files = [];
           return next();
         }
+        // overwrite all files
         if (actions.all === true) {
           files.push(file);
           return next();
         }
 
-        file.path = path.resolve(dest, file.relative);
-        detect(file, next);
+        file.path = path.resolve(path.resolve(app.cwd, dest), file.relative);
+        app.detectConflicts(file, next);
       }, function(next) {
-        // for (var i = 0; i < files.length; i++) {
-        //   this.push(files[i]);
-        // }
         files.forEach(this.push.bind(this));
         next();
       });
@@ -84,6 +82,7 @@ module.exports = function(config) {
  *   - `d` show the differences between the old and the new
  *   - `h` help. displays this help menu in the terminal
  *
+ * @param {Object} `app` Base application instance
  * @param {Array} `files`
  * @param {Object} `actions`
  * @param {Object} `options`
@@ -93,25 +92,17 @@ function detectConflicts(app, files, actions, options) {
   actionsListeners(app, files, actions);
   var questions = inquirer();
 
-  return function(file, next) {
+  app.define('detectConflicts', function(file, next) {
     var conflict = utils.detect(file.path, file.contents.toString());
     if (conflict) {
-      // app.questions.set('actions', createQuestion(file));
-      // app.questions.ask('actions', function(err, answers) {
-      //   if (err) return next(err);
-      //   app.emit('action', answers.actions, file, next);
-      // });
-
-      questions.prompt(createQuestion(file), function(err, answers) {
-        if (err) return next(err);
+      questions.prompt(createQuestion(file), function(answers) {
         app.emit('action', answers.actions, file, next);
       });
-
     } else {
       files.push(file);
       next();
     }
-  };
+  });
 }
 
 /**
@@ -125,7 +116,6 @@ function detectConflicts(app, files, actions, options) {
 
 function actionsListeners(app, files, actions) {
   app.on('action', function(type, file, next) {
-    // console.log(arguments)
     utils.log[type](file);
     app.emit('action.' + type, file, next);
   });
@@ -158,12 +148,19 @@ function actionsListeners(app, files, actions) {
   });
 }
 
+/**
+ * Create the question to ask when a conflict is detected
+ *
+ * @param {Object} `file` vinyl file
+ * @return {Array} Question formatted the way inquirer expects it.
+ */
+
 function createQuestion(file) {
   return [{
     name: 'actions',
     type: 'expand',
     save: false,
-    message: 'Existing file found. Want to overwrite ' + utils.relative(file) + '?',
+    message: 'File exists, want to overwrite ' + utils.relative(file) + '?',
     choices: [{
       key: 'y',
       name: 'yes, overwrite this file',
@@ -182,7 +179,7 @@ function createQuestion(file) {
       value: 'abort'
     }, {
       key: 'd',
-      name: 'show the differences between the old and the new',
+      name: 'show the differences between the existing and the new',
       value: 'diff'
     }]
   }];
