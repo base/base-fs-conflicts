@@ -1,12 +1,12 @@
 {
-  "name": "file-conflicts",
-  "description": "Detect file system conflicts.",
+  "name": "base-fs-conflicts",
+  "description": "Detect potential file system conflicts and, if necessary, prompt the user before overwriting files.",
   "version": "0.1.0",
-  "homepage": "https://github.com/jonschlinkert/file-conflicts",
+  "homepage": "https://github.com/jonschlinkert/base-fs-conflicts",
   "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
-  "repository": "jonschlinkert/file-conflicts",
+  "repository": "jonschlinkert/base-fs-conflicts",
   "bugs": {
-    "url": "https://github.com/jonschlinkert/file-conflicts/issues"
+    "url": "https://github.com/jonschlinkert/base-fs-conflicts/issues"
   },
   "license": "MIT",
   "files": [
@@ -22,42 +22,74 @@
   },
   "dependencies": {
     "ansi-colors": "^0.1.0",
-    "array-pull": "^0.2.0",
-    "async": "^1.5.2",
-    "base-questions": "^0.3.2",
-    "bytes": "^2.2.0",
+    "bytes": "^2.3.0",
     "cli-table": "^0.3.1",
     "dateformat-light": "^1.0.14",
     "detect-conflict": "^1.0.0",
     "diff": "^2.2.1",
     "error-symbol": "^0.1.0",
-    "gitty": "^3.3.3",
+    "extend-shallow": "^2.0.1",
     "info-symbol": "^0.1.0",
-    "is-affirmative": "^0.1.0",
+    "inquirer2": "^0.1.1",
     "istextorbinary": "^1.0.2",
     "lazy-cache": "^1.0.3",
     "read-chunk": "^1.0.1",
     "success-symbol": "^0.1.0",
-    "try-open": "^0.1.0",
     "warning-symbol": "^0.1.0"
   },
   "devDependencies": {
+    "base": "^0.7.9",
+    "base-fs": "^0.3.0",
     "gulp": "^3.9.1",
-    "gulp-format-md": "*",
-    "mocha": "*",
+    "gulp-eslint": "^2.0.0",
+    "gulp-format-md": "^0.1.7",
+    "gulp-istanbul": "^0.10.3",
+    "gulp-mocha": "^2.2.0",
     "through2": "^2.0.1"
   },
-  "keywords": [],
+  "keywords": [
+    "conflict",
+    "error",
+    "exist",
+    "existing",
+    "file",
+    "filepath",
+    "files",
+    "fs",
+    "gulpfriendly",
+    "overwrite",
+    "path",
+    "stream",
+    "vinyl",
+    "warn",
+    "warning",
+    "write"
+  ],
   "lintDeps": {
     "ignore": []
   },
   "verb": {
+    "toc": false,
     "layout": "default",
+    "options": {
+      "lint": {
+        "reflinks": true
+      }
+    },
     "plugins": [
       "gulp-format-md"
     ],
     "related": {
-      "list": []
-    }
+      "list": [
+        "verb",
+        "generate",
+        "assemble",
+        "templates"
+      ]
+    },
+    "reflinks": [
+      "verb",
+      "yeoman-generator"
+    ]
   }
 }
