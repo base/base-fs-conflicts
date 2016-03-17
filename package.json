@@ -2,11 +2,11 @@
   "name": "base-fs-conflicts",
   "description": "Detect potential file system conflicts and, if necessary, prompt the user before overwriting files.",
   "version": "0.1.0",
-  "homepage": "https://github.com/jonschlinkert/base-fs-conflicts",
+  "homepage": "https://github.com/node-base/base-fs-conflicts",
   "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
-  "repository": "jonschlinkert/base-fs-conflicts",
+  "repository": "node-base/base-fs-conflicts",
   "bugs": {
-    "url": "https://github.com/jonschlinkert/base-fs-conflicts/issues"
+    "url": "https://github.com/node-base/base-fs-conflicts/issues"
   },
   "license": "MIT",
   "files": [
@@ -21,31 +21,27 @@
     "test": "mocha"
   },
   "dependencies": {
-    "ansi-colors": "^0.1.0",
     "bytes": "^2.3.0",
     "cli-table": "^0.3.1",
     "dateformat-light": "^1.0.14",
     "detect-conflict": "^1.0.0",
-    "diff": "^2.2.1",
-    "error-symbol": "^0.1.0",
+    "diff": "^2.2.2",
     "extend-shallow": "^2.0.1",
-    "info-symbol": "^0.1.0",
     "inquirer2": "^0.1.1",
     "istextorbinary": "^1.0.2",
     "lazy-cache": "^1.0.3",
+    "log-utils": "^0.1.0",
     "read-chunk": "^1.0.1",
-    "success-symbol": "^0.1.0",
-    "warning-symbol": "^0.1.0"
+    "through2": "^2.0.1"
   },
   "devDependencies": {
-    "base": "^0.7.9",
-    "base-fs": "^0.3.0",
+    "base": "^0.8.1",
+    "base-fs": "^0.3.1",
     "gulp": "^3.9.1",
     "gulp-eslint": "^2.0.0",
     "gulp-format-md": "^0.1.7",
     "gulp-istanbul": "^0.10.3",
-    "gulp-mocha": "^2.2.0",
-    "through2": "^2.0.1"
+    "gulp-mocha": "^2.2.0"
   },
   "keywords": [
     "conflict",
@@ -65,10 +61,8 @@
     "warning",
     "write"
   ],
-  "lintDeps": {
-    "ignore": []
-  },
   "verb": {
+    "run": true,
     "toc": false,
     "layout": "default",
     "options": {
@@ -76,6 +70,9 @@
         "reflinks": true
       }
     },
+    "tasks": [
+      "readme"
+    ],
     "plugins": [
       "gulp-format-md"
     ],
@@ -89,7 +86,16 @@
     },
     "reflinks": [
       "verb",
-      "yeoman-generator"
-    ]
+      "yeoman-generator",
+      "base",
+      "assemble",
+      "generate"
+    ],
+    "lint": {
+      "reflinks": true
+    }
+  },
+  "lintDeps": {
+    "ignore": []
   }
 }
