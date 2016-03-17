@@ -116,7 +116,7 @@ function detectConflicts(app, files, actions, options) {
 
 function actionsListeners(app, files, actions) {
   app.on('action', function(type, file, next) {
-    utils.log[type](file);
+    utils.action[type](file);
     app.emit('action.' + type, file, next);
   });
 
