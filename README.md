@@ -37,6 +37,12 @@ base.src('fixtures/*.txt')
   .pipe(base.dest(dest));
 ```
 
+**Example**
+
+If a file conflict is detected, you'll see something like this in the terminal:
+
+<img width="570" alt="screen shot 2016-03-17 at 8 05 53 pm" src="https://cloud.githubusercontent.com/assets/383994/13864890/d9f67420-ec7b-11e5-973d-47462989d773.png">
+
 ## API
 
 1. The existing file's contents is compared with `file.contents` on the vinyl file
