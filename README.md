@@ -1,6 +1,6 @@
 # base-fs-conflicts [![NPM version](https://img.shields.io/npm/v/base-fs-conflicts.svg)](https://www.npmjs.com/package/base-fs-conflicts) [![Build Status](https://img.shields.io/travis/node-base/base-fs-conflicts.svg)](https://travis-ci.org/node-base/base-fs-conflicts)
 
-> Detect potential file system conflicts and, if necessary, prompt the user before overwriting files.
+> Detect potential file system conflicts and if necessary prompt the user before overwriting files.
 
 ## Install
 
