@@ -60,7 +60,6 @@ module.exports = function(config) {
           return next();
         }
 
-        file.path = path.resolve(path.resolve(app.cwd, dest), file.relative);
         app.detectConflicts(file, next);
       }, function(next) {
         files.forEach(this.push.bind(this));
