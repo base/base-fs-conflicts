@@ -1,7 +1,7 @@
 {
   "name": "base-fs-conflicts",
   "description": "Detect potential file system conflicts and if necessary prompt the user before overwriting files.",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "homepage": "https://github.com/node-base/base-fs-conflicts",
   "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
   "repository": "node-base/base-fs-conflicts",
@@ -11,7 +11,7 @@
   "license": "MIT",
   "files": [
     "index.js",
-    "lib/"
+    "lib"
   ],
   "main": "index.js",
   "engines": {
@@ -29,9 +29,9 @@
     "extend-shallow": "^2.0.1",
     "inquirer2": "^0.1.1",
     "istextorbinary": "^1.0.2",
-    "lazy-cache": "^1.0.3",
-    "log-utils": "^0.1.0",
-    "read-chunk": "^1.0.1",
+    "lazy-cache": "^2.0.1",
+    "log-utils": "^0.1.4",
+    "read-chunk": "^2.0.0",
     "through2": "^2.0.1"
   },
   "devDependencies": {
@@ -39,9 +39,10 @@
     "base-fs": "^0.3.1",
     "gulp": "^3.9.1",
     "gulp-eslint": "^2.0.0",
-    "gulp-format-md": "^0.1.7",
-    "gulp-istanbul": "^0.10.3",
-    "gulp-mocha": "^2.2.0"
+    "gulp-format-md": "^0.1.9",
+    "gulp-istanbul": "^0.10.4",
+    "gulp-mocha": "^2.2.0",
+    "verb-readme-generator": "^0.1.10"
   },
   "keywords": [
     "conflict",
@@ -62,14 +63,8 @@
     "write"
   ],
   "verb": {
-    "run": true,
     "toc": false,
     "layout": "default",
-    "options": {
-      "lint": {
-        "reflinks": true
-      }
-    },
     "tasks": [
       "readme"
     ],
@@ -78,24 +73,21 @@
     ],
     "related": {
       "list": [
-        "verb",
-        "generate",
         "assemble",
-        "templates"
+        "generate",
+        "templates",
+        "verb"
       ]
     },
     "reflinks": [
-      "verb",
-      "yeoman-generator",
-      "base",
       "assemble",
-      "generate"
+      "base",
+      "generate",
+      "verb",
+      "yeoman-generator"
     ],
     "lint": {
       "reflinks": true
     }
-  },
-  "lintDeps": {
-    "ignore": []
   }
 }

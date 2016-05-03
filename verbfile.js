@@ -13,7 +13,7 @@ var conflicts = require('./');
  */
 
 module.exports = function(verb) {
-  verb.extendWith('verb-readme-generator');
+  verb.use(require('verb-readme-generator'));
   verb.use(conflicts());
 
   verb.task('conflicts', function() {
