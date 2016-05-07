@@ -1,7 +1,6 @@
 'use strict';
 
 var path = require('path');
-var inquirer = require('inquirer2');
 var utils = require('./lib/utils');
 var diff = require('./lib/diffs');
 
@@ -44,6 +43,7 @@ module.exports = function(config) {
 
       return utils.through.obj(function(file, enc, next) {
         if (file.isNull()) return next();
+        file.dest = dest;
 
         // overwrite the current file
         if (opts.overwrite === true) {
@@ -89,7 +89,7 @@ module.exports = function(config) {
 
 function detectConflicts(app, files, actions, options) {
   actionsListeners(app, files, actions);
-  var questions = inquirer();
+  var questions = utils.inquirer();
 
   app.define('detectConflicts', function(file, next) {
     var conflict = utils.detect(file.path, file.contents.toString());
