@@ -1,7 +1,7 @@
 {
   "name": "base-fs-conflicts",
   "description": "Detect potential file system conflicts and if necessary prompt the user before overwriting files.",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "homepage": "https://github.com/node-base/base-fs-conflicts",
   "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
   "repository": "node-base/base-fs-conflicts",
