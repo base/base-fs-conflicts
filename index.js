@@ -92,7 +92,8 @@ function detectConflicts(app, files, actions, options) {
   var questions = utils.inquirer();
 
   app.define('detectConflicts', function(file, next) {
-    var conflict = utils.detect(file.path, file.contents.toString());
+    var fp = path.resolve(file.dest, file.relative);
+    var conflict = utils.detect(fp, file.contents.toString());
     if (conflict) {
       questions.prompt(createQuestion(file), function(answers) {
         app.emit('action', answers.actions, file, next);
