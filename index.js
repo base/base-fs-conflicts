@@ -35,32 +35,36 @@ module.exports = function(config) {
       }
 
       if (!('cwd' in app)) {
-        app.cwd = process.cwd();
+        app.use(utils.cwd());
       }
 
       var opts = utils.extend({}, config, this.options, options);
-      detectConflicts(this, files, actions, opts);
+      var conflicts = detectConflicts(this, files, actions, opts);
 
       return utils.through.obj(function(file, enc, next) {
-        if (file.isNull()) return next();
+        if (file.isNull() || (file.stat && file.stat.isDirectory())) {
+          next();
+          return;
+        }
+
         file.dest = dest;
 
-        // overwrite the current file
-        if (opts.overwrite === true) {
-          return next(null, file);
-        }
-        // abort
-        if (actions.abort) {
-          files = [];
-          return next();
-        }
-        // overwrite all files
-        if (actions.all === true) {
-          files.push(file);
-          return next();
-        }
+        // // overwrite the current file
+        // if (opts.overwrite === true) {
+        //   return next(null, file);
+        // }
+        // // abort
+        // if (actions.abort) {
+        //   files = [];
+        //   return next();
+        // }
+        // // overwrite all files
+        // if (actions.all === true) {
+        //   files.push(file);
+        //   return next();
+        // }
 
-        app.detectConflicts(file, next);
+        conflicts(file, next);
       }, function(next) {
         files.forEach(this.push.bind(this));
         next();
@@ -88,10 +92,29 @@ module.exports = function(config) {
  */
 
 function detectConflicts(app, files, actions, options) {
+  var opts = utils.extend({}, options);
   actionsListeners(app, files, actions);
   var questions = utils.inquirer();
 
-  app.define('detectConflicts', function(file, next) {
+  return function(file, next) {
+    // overwrite the current file
+    if (opts.overwrite === true) {
+      next(null, file);
+      return;
+    }
+    // abort
+    if (actions.abort) {
+      files = [];
+      next();
+      return;
+    }
+    // overwrite all files
+    if (actions.all === true) {
+      files.push(file);
+      next();
+      return;
+    }
+
     var fp = path.resolve(file.dest, file.relative);
     var conflict = utils.detect(fp, file.contents.toString());
     if (conflict) {
@@ -102,7 +125,7 @@ function detectConflicts(app, files, actions, options) {
       files.push(file);
       next();
     }
-  });
+  };
 }
 
 /**
@@ -142,7 +165,10 @@ function actionsListeners(app, files, actions) {
 
   app.on('action.diff', function(file, next) {
     diff(file, function(err) {
-      if (err) return next(err);
+      if (err) {
+        next(err);
+        return;
+      }
       app.detectConflicts(file, next);
     });
   });
