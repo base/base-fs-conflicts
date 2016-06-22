@@ -1,6 +1,7 @@
 'use strict';
 
 var path = require('path');
+var Emitter = require('component-emitter');
 var utils = require('./lib/utils');
 var diff = require('./lib/diffs');
 
@@ -39,7 +40,8 @@ module.exports = function(config) {
       }
 
       var opts = utils.extend({}, config, this.options, options);
-      app.define('detectConflicts', detectConflicts(this, files, actions, opts));
+      var emitter = Emitter({});
+      emitter.detectConflicts = detectConflicts(emitter, files, actions, opts);
 
       return utils.through.obj(function(file, enc, next) {
         if (file.isNull() || (file.stat && file.stat.isDirectory())) {
@@ -51,7 +53,7 @@ module.exports = function(config) {
           ? dest(file)
           : dest;
 
-        app.detectConflicts(file, next);
+        emitter.detectConflicts(file, next);
       }, function(next) {
         var self = this;
         files.forEach(function(file) {
@@ -81,9 +83,9 @@ module.exports = function(config) {
  * @param {Object} `options`
  */
 
-function detectConflicts(app, files, actions, options) {
+function detectConflicts(emitter, files, actions, options) {
   var opts = utils.extend({}, options);
-  actionsListeners(app, files, actions);
+  actionsListeners(emitter, files, actions);
   var questions = utils.inquirer();
 
   return function(file, next) {
@@ -109,7 +111,7 @@ function detectConflicts(app, files, actions, options) {
     var conflict = utils.detect(fp, file.contents.toString());
     if (conflict) {
       questions.prompt(createQuestion(file), function(answers) {
-        app.emit('action', answers.actions, file, next);
+        emitter.emit('action', answers.actions, file, next);
       });
     } else {
       files.push(file);
@@ -122,44 +124,55 @@ function detectConflicts(app, files, actions, options) {
  * Listen for action events, based on feedback provided by the user
  * after a conflict was identified.
  *
- * @param {Object} `app` instance of assemble, templates, verb, generator or any other templates-based application.
+ * @param {Object} `emitter` instance of assemble, templates, verb, generator or any other templates-based application.
  * @param {Array} `files` Array of files to write
  * @param {Object} `actions` Object of actions to propagate
  */
 
-function actionsListeners(app, files, actions) {
-  app.on('action', function(type, file, next) {
+function once(fn) {
+  var res;
+  return function() {
+    if (!fn.called) {
+      fn.called = true;
+      res = fn.apply(null, arguments);
+    }
+    return res;
+  };
+}
+
+function actionsListeners(emitter, files, actions) {
+  emitter.on('action', function(type, file, next) {
     utils.action[type](file);
-    app.emit('action.' + type, file, next);
+    emitter.emit('action.' + type, file, next);
   });
 
-  app.on('action.yes', function(file, next) {
+  emitter.on('action.yes', function(file, next) {
     files.push(file);
     next();
   });
 
-  app.on('action.no', function(file, next) {
+  emitter.on('action.no', function(file, next) {
     next();
   });
 
-  app.on('action.all', function(file, next) {
+  emitter.on('action.all', function(file, next) {
     actions.all = true;
     files.push(file);
     next();
   });
 
-  app.on('action.abort', function(file, next) {
+  emitter.on('action.abort', function(file, next) {
     actions.abort = true;
     next();
   });
 
-  app.on('action.diff', function(file, next) {
+  emitter.on('action.diff', function(file, next) {
     diff(file, function(err) {
       if (err) {
         next(err);
         return;
       }
-      app.detectConflicts(file, next);
+      emitter.detectConflicts(file, next);
     });
   });
 }

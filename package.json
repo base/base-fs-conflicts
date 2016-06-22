@@ -24,6 +24,7 @@
     "base-cwd": "^0.2.1",
     "bytes": "^2.3.0",
     "cli-table": "^0.3.1",
+    "component-emitter": "^1.2.1",
     "dateformat-light": "^1.0.14",
     "detect-conflict": "^1.0.0",
     "diff": "^2.2.2",
