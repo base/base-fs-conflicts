@@ -39,7 +39,7 @@ module.exports = function(config) {
       }
 
       var opts = utils.extend({}, config, this.options, options);
-      var conflicts = detectConflicts(this, files, actions, opts);
+      app.define('detectConflicts', detectConflicts(this, files, actions, opts));
 
       return utils.through.obj(function(file, enc, next) {
         if (file.isNull() || (file.stat && file.stat.isDirectory())) {
@@ -47,26 +47,16 @@ module.exports = function(config) {
           return;
         }
 
-        file.dest = dest;
+        file.dest = typeof dest === 'function'
+          ? dest(file)
+          : dest;
 
-        // // overwrite the current file
-        // if (opts.overwrite === true) {
-        //   return next(null, file);
-        // }
-        // // abort
-        // if (actions.abort) {
-        //   files = [];
-        //   return next();
-        // }
-        // // overwrite all files
-        // if (actions.all === true) {
-        //   files.push(file);
-        //   return next();
-        // }
-
-        conflicts(file, next);
+        app.detectConflicts(file, next);
       }, function(next) {
-        files.forEach(this.push.bind(this));
+        var self = this;
+        files.forEach(function(file) {
+          self.push(file);
+        });
         next();
       });
     });

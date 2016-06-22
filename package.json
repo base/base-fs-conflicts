@@ -21,6 +21,7 @@
     "test": "mocha"
   },
   "dependencies": {
+    "base-cwd": "^0.2.1",
     "bytes": "^2.3.0",
     "cli-table": "^0.3.1",
     "dateformat-light": "^1.0.14",
@@ -32,6 +33,7 @@
     "lazy-cache": "^2.0.1",
     "log-utils": "^0.1.4",
     "read-chunk": "^2.0.0",
+    "set-blocking": "^2.0.0",
     "through2": "^2.0.1"
   },
   "devDependencies": {
@@ -42,10 +44,15 @@
     "gulp-format-md": "^0.1.9",
     "gulp-istanbul": "^0.10.4",
     "gulp-mocha": "^2.2.0",
-    "verb-readme-generator": "^0.1.10"
+    "gulp-unused": "^0.1.2",
+    "mocha": "^2.5.3",
+    "verb-readme-generator": "^0.1.14"
   },
   "keywords": [
+    "base",
+    "baseplugin",
     "conflict",
+    "conflicts",
     "error",
     "exist",
     "existing",
@@ -56,6 +63,7 @@
     "gulpfriendly",
     "overwrite",
     "path",
+    "plugin",
     "stream",
     "vinyl",
     "warn",
@@ -84,7 +92,8 @@
       "base",
       "generate",
       "verb",
-      "yeoman-generator"
+      "yeoman-generator",
+      "verb-readme-generator"
     ],
     "lint": {
       "reflinks": true
