@@ -124,26 +124,6 @@ function detectConflicts(emitter, files, actions, options) {
   };
 }
 
-/**
- * Listen for action events, based on feedback provided by the user
- * after a conflict was identified.
- *
- * @param {Object} `emitter` instance of assemble, templates, verb, generator or any other templates-based application.
- * @param {Array} `files` Array of files to write
- * @param {Object} `actions` Object of actions to propagate
- */
-
-function once(fn) {
-  var res;
-  return function() {
-    if (!fn.called) {
-      fn.called = true;
-      res = fn.apply(null, arguments);
-    }
-    return res;
-  };
-}
-
 function actionsListeners(emitter, files, actions) {
   emitter.on('action', function(type, file, next) {
     utils.action[type](file);
