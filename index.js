@@ -94,6 +94,10 @@ function detectConflicts(emitter, files, actions, options) {
       next(null, file);
       return;
     }
+    if (typeof opts.overwrite === 'function' && opts.overwrite(file) === true) {
+      next(null, file);
+      return;
+    }
     // abort
     if (actions.abort) {
       files = [];
