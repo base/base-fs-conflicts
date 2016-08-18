@@ -11,7 +11,9 @@
   "license": "MIT",
   "files": [
     "index.js",
-    "lib"
+    "lib",
+    "LICENSE",
+    "README.md"
   ],
   "main": "index.js",
   "engines": {
@@ -51,22 +53,32 @@
     "verb-readme-generator": "^0.1.14"
   },
   "keywords": [
+    "api",
+    "app",
+    "application",
     "base",
     "baseplugin",
+    "building-blocks",
     "conflict",
     "conflicts",
+    "create",
     "error",
     "exist",
     "existing",
     "file",
     "filepath",
     "files",
+    "framework",
     "fs",
     "gulpfriendly",
     "overwrite",
     "path",
     "plugin",
+    "plugins",
     "stream",
+    "tool",
+    "toolkit",
+    "tools",
     "vinyl",
     "warn",
     "warning",
@@ -94,8 +106,8 @@
       "base",
       "generate",
       "verb",
-      "yeoman-generator",
-      "verb-readme-generator"
+      "verb-readme-generator",
+      "yeoman-generator"
     ],
     "lint": {
       "reflinks": true
