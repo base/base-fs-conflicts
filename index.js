@@ -28,7 +28,6 @@ var diff = require('./lib/diffs');
 module.exports = function(config) {
   return function(app) {
     var actions = {};
-    var files = [];
 
     this.define('conflicts', function(dest, options) {
       if (typeof dest !== 'string') {
@@ -41,6 +40,8 @@ module.exports = function(config) {
 
       var opts = utils.extend({}, config, this.options, options);
       var emitter = Emitter({});
+      var files = [];
+
       emitter.detectConflicts = detectConflicts(emitter, files, actions, opts);
 
       return utils.through.obj(function(file, enc, next) {
