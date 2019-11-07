@@ -29,7 +29,7 @@
     "component-emitter": "^1.2.1",
     "dateformat-light": "^1.0.14",
     "detect-conflict": "^1.0.0",
-    "diff": "^2.2.2",
+    "diff": "^4.0.1",
     "extend-shallow": "^2.0.1",
     "inquirer2": "^0.1.1",
     "istextorbinary": "^1.0.2",
